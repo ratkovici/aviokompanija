@@ -1,5 +1,6 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,13 +14,16 @@ public class Avion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String registracija;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "marka_id")
+    @JsonIgnore
     public Marka marka;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "aviokompanija_id")
+    @JsonIgnore
     public Aviokompanija aviokompanija;
-    @OneToMany(mappedBy = "avion")
+    @OneToMany(mappedBy = "avion",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     public List<Let> letovi;
 
     @Override
@@ -39,9 +43,6 @@ public class Avion {
         return "Avion{" +
                 "id=" + id +
                 ", registracija='" + registracija + '\'' +
-                ", marka=" + marka +
-                ", aviokompanija=" + aviokompanija +
-                ", letovi=" + letovi +
                 '}';
     }
 
@@ -77,6 +78,7 @@ public class Avion {
         this.aviokompanija = aviokompanija;
     }
 
+    @JsonIgnore
     public List<Let> getLetovi() {
         return letovi;
     }

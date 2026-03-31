@@ -1,13 +1,16 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "karta")
+@NamedQuery(name = Karta.GET_ALL_KARTE_FOR_PUTNIK_ID, query = "Select k from Karta k where k.putnik.id = :id")
 public class Karta {
 
+    public static final String GET_ALL_KARTE_FOR_PUTNIK_ID = "GetAllKarteForPutnikId";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
@@ -20,6 +23,7 @@ public class Karta {
 
     @ManyToOne
     @JoinColumn(name = "putnik_id")
+    @JsonIgnore
     public Putnik putnik;
 
     public int getId() {

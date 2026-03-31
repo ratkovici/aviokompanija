@@ -1,5 +1,6 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class Aviokompanija {
     public int id;
     public String naziv;
     @OneToMany(mappedBy = "aviokompanija")
+    @JsonIgnore
     public List<Avion> avioni;
 
     public String getNaziv() {
@@ -24,6 +26,7 @@ public class Aviokompanija {
         return id;
     }
 
+    @JsonIgnore
     public List<Avion> getAvioni() {
         return avioni;
     }
@@ -52,12 +55,12 @@ public class Aviokompanija {
         return Objects.hash(id, naziv, avioni);
     }
 
+
     @Override
     public String toString() {
         return "Aviokompanija{" +
                 "id=" + id +
                 ", naziv='" + naziv + '\'' +
-                ", avioni=" + avioni +
                 '}';
     }
 }

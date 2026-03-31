@@ -1,5 +1,6 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,11 +12,13 @@ public class Let {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
+    @Column(name = "broj_leta")
     public String brojLeta;
     public String polaziste;
     public String odrediste;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "avion_id")
+    @JsonIgnore
     public Avion avion;
     @ManyToMany
     @JoinTable(
@@ -25,6 +28,7 @@ public class Let {
     )
     public List<Radnik> posada;
     @OneToMany(mappedBy = "let")
+    @JsonIgnore
     public List<Karta> karte;
 
     public Integer getId() {
@@ -75,6 +79,7 @@ public class Let {
         this.posada = posada;
     }
 
+    @JsonIgnore
     public List<Karta> getKarte() {
         return karte;
     }
@@ -85,13 +90,14 @@ public class Let {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Let let = (Let) o;
-        return Objects.equals(id, let.id) && Objects.equals(brojLeta, let.brojLeta) && Objects.equals(polaziste, let.polaziste) && Objects.equals(odrediste, let.odrediste) && Objects.equals(avion, let.avion) && Objects.equals(posada, let.posada) && Objects.equals(karte, let.karte);
+        return id == let.id && Objects.equals(brojLeta, let.brojLeta);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, brojLeta, polaziste, odrediste, avion, posada, karte);
+        return Objects.hash(id, brojLeta);
     }
 }

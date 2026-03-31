@@ -1,5 +1,6 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -7,17 +8,28 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "putnik")
+@NamedQuery(name = Putnik.GET_ALL_PUTNICI, query = "Select p.id, p.ime, p.prezime from Putnik p")
+@NamedQuery(name = Putnik.GET_PUTNIK_BY_NAME, query = "Select p from Putnik p where p.ime = :imeP")
 public class Putnik {
+
+    public static final String GET_ALL_PUTNICI = "GetAllPutnici";
+    public static final String GET_PUTNIK_BY_NAME = "GetPutnikByName";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String ime;
     public String prezime;
 
-    @OneToOne(mappedBy = "putnik")
+    @OneToOne(mappedBy = "putnik", cascade = CascadeType.ALL)
     public Pasos pasos;
 
-    @OneToMany(mappedBy = "putnik")
+
+    @OneToOne(mappedBy = "putnik", cascade = CascadeType.ALL)
+    public DetaljiPutnika detalji;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "putnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public List<Karta> karte;
 
     public int getId() {
@@ -50,6 +62,14 @@ public class Putnik {
 
     public void setPasos(Pasos pasos) {
         this.pasos = pasos;
+    }
+
+    public DetaljiPutnika getDetalji() {
+        return detalji;
+    }
+
+    public void setDetalji(DetaljiPutnika detalji) {
+        this.detalji = detalji;
     }
 
     public List<Karta> getKarte() {

@@ -1,5 +1,6 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class Marka {
     public int id;
     public String naziv;
     @OneToMany(mappedBy = "marka")
+    @JsonIgnore
     public List<Avion> avioni;
 
     @Override

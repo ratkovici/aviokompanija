@@ -1,5 +1,6 @@
 package org.acme.resource;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -20,6 +21,7 @@ public class PutnikResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/addPutnik")
+    @RolesAllowed("admin")
     public Response addPutnik(Putnik putnik) {
         try {
             putnikService.createPutnik(putnik);

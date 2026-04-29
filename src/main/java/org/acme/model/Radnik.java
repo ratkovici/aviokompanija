@@ -1,5 +1,6 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public class Radnik {
     @JoinColumn(name = "uloga_id")
     public UlogaRadnika uloga;
     @ManyToMany(mappedBy = "posada")
+    @JsonIgnore
     public List<Let> letovi;
+
 
     public int getId() {
         return id;

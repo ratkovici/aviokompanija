@@ -3,6 +3,7 @@ package org.acme.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public class Putnik {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    public long id;
     public String ime;
     public String prezime;
 
@@ -32,11 +33,21 @@ public class Putnik {
     @OneToMany(mappedBy = "putnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public List<Karta> karte;
 
-    public int getId() {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "putnik_uploaded",
+            joinColumns = @JoinColumn(name = "putnik_id"),
+            inverseJoinColumns = @JoinColumn(name = "uploaded_file_id")
+
+    )
+   // @JsonIgnore
+    public List<UploadedFile> uploadedFiles = new ArrayList<>();
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -78,6 +89,14 @@ public class Putnik {
 
     public void setKarte(List<Karta> karte) {
         this.karte = karte;
+    }
+
+    public List<UploadedFile> getUploadedFiles() {
+        return this.uploadedFiles;
+    }
+
+    public void setUploadedFiles(List<UploadedFile> uploadedFiles) {
+        this.uploadedFiles = uploadedFiles;
     }
 
     @Override
